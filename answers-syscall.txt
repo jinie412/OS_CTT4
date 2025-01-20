@@ -1,0 +1,22 @@
+1. Looking at the backtrace output, which function called syscall?
+-> Hàm usertrap() ở vị trí kernel/trap.c:67 đã gọi syscall.
+
+2. What is the value of p->trapframe->a7 and what does that value represent?
+-> Giá trị của p->trapframe->a7 là 7.
+-> Ta xem trong user/initcode.S thấy được a7 lưu giá trị SYS_exec. Như vậy, giá trị được lưu bởi p->trapframe->a7 đại diện cho giá trị SYS_exec.
+
+3. What was the previous mode that the CPU was in?
+-> Đó là user mode.
+
+4. Write down the assembly instruction the kernel is panicing at. Which register corresponds to the variable num?
+-> Lệnh assembly mà kernel đang gặp sự cố là lw a3, 0(zero)
+-> Thanh ghi a3 tương ứng với biến num.
+
+5. Why does the kernel crash? Hint: look at figure 3-3 in the text; is address 0 mapped in the kernel address space? Is that confirmed by the value in scause above?
+-> Kernel gặp sự cố do nó cố gắng truy cập vào một địa chỉ bộ nhớ không hợp lệ.
+-> Theo hình 3.3 trong sách, địa chỉ 0 không được ánh xạ vào không gian kernel.
+-> Trước đó ta có scause = 0xd (13) có nghĩa là Load page fault dựa theo bảng bên dưới. Load page fault là một lỗi xảy ra khi một tiến trình cố gắng truy cập vào trang bộ nhớ không được tải vào bộ nhớ chính, điều này cũng chứng minh kết luận bên trên.
+
+6. What is the name of the binary that was running when the kernel paniced? What is its process id (pid)?
+-> Tên của tệp nhị phân đang chạy là initcode.
+-> Process id (pid) của nó là 1.
